@@ -1,0 +1,43 @@
+{
+  "name": "kronos-http-routing-step",
+  "version": "0.0.0",
+  "description": "step to rout http requests to endpoints",
+  "tags": "kronos-step",
+  "main": "http_routing.js",
+  "scripts": {
+    "cover": "node ./node_modules/istanbul/lib/cli.js cover --hook-run-in-context ./node_modules/mocha/bin/_mocha -- --R spec --U exports test",
+    "doc": "jsdoc lib/*.js",
+    "test": "mocha test/*.js",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kronos-Integration/kronos-http-routing-step.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kronos-Integration/kronos-http-routing-step/issues"
+  },
+  "homepage": "https://github.com/Kronos-Integration/kronos-http-routing-step#readme",
+  "dependencies": {
+    "kronos-adapter-inbound-http": "1.0.1"
+  },
+  "devDependencies": {
+    "chai": "3.4.1",
+    "chai-as-promised": "5.1.0",
+    "istanbul": "^0.4.0",
+    "kronos-test-step": "1.2.0",
+    "mocha": "2.3.4",
+    "semantic-release": "6.0.3"
+  },
+  "contributors": [{
+    "name": "Torsten Link",
+    "email": "torstenlink@gmx.de"
+  }, {
+    "name": "Markus Felten",
+    "email": "markus.felten@gmx.de"
+  }],
+  "license": "BSD-2-Clause",
+  "engines": {
+    "node": ">=4.2.1"
+  }
+}
