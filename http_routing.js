@@ -10,12 +10,6 @@ const httpRoutingStep = Object.assign({}, require('kronos-adapter-inbound-http')
 			"out": true,
 			"active": true
 		}
-	},
-	_start() {
-		const step = this;
-		const manager = this.manager;
-
-		return Promise.resolve(step);
 	}
 });
 
