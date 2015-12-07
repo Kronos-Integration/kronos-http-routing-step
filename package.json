@@ -3,11 +3,14 @@
   "version": "0.0.0",
   "description": "step to rout http requests to endpoints",
   "tags": "kronos-step",
-  "main": "http_routing.js",
+  "main": "lib/http_routing.js",
+  "esnext:main": "src/http_routing.js",
   "scripts": {
     "cover": "node ./node_modules/istanbul/lib/cli.js cover --hook-run-in-context ./node_modules/mocha/bin/_mocha -- --R spec --U exports test",
-    "doc": "jsdoc lib/*.js",
-    "test": "mocha test/*.js",
+    "compile": "babel --presets es2015 -d lib src",
+    "prepublish": "npm run compile",
+    "doc": "jsdoc src/*.js",
+    "test": "npm run compile && mocha --compilers js:babel-core/register --recursive",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
@@ -23,6 +26,9 @@
     "koa-route": "^3.0.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.3.13",
+    "babel-core": "^6.3.13",
+    "babel-preset-es2015": "^6.3.13",
     "chai": "3.4.1",
     "chai-as-promised": "5.1.0",
     "istanbul": "^0.4.0",

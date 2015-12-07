@@ -17,7 +17,7 @@ const testStep = require('kronos-test-step'),
 
 const manager = testStep.managerMock;
 
-require('../http_routing').registerWithManager(manager);
+require('../lib/http_routing').registerWithManager(manager);
 
 describe('http-routing', function () {
   const hr = manager.steps['kronos-http-routing'].createInstance(manager, undefined, {
