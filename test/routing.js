@@ -22,7 +22,14 @@ require('../http_routing').registerWithManager(manager);
 describe('http-routing', function () {
   const hr = manager.steps['kronos-http-routing'].createInstance(manager, undefined, {
     name: "myStep",
-    type: "kronos-http-routing"
+    type: "kronos-http-routing",
+
+    routes: {
+      "r1": {},
+      "r2": {
+        "method": "DELETE"
+      }
+    }
   });
 
   const testEndpoint = BaseStep.createEndpoint('test', {
