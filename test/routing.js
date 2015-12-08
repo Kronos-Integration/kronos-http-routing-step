@@ -6,8 +6,11 @@
 const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
-  should = chai.should();
+  should = chai.should(),
+  request = require("supertest-as-promised")(Promise);
+
 chai.use(require("chai-as-promised"));
+
 
 const path = require('path'),
   fs = require('fs');
@@ -25,7 +28,7 @@ describe('http-routing', function () {
     type: "kronos-http-routing",
 
     routes: {
-      "r1": {},
+      "r1/:id": {},
       "r2": {
         "method": "DELETE"
       }
@@ -42,7 +45,7 @@ describe('http-routing', function () {
     console.log(`got request: ${request}`);
   });
 
-  testEndpoint.connect(hr.endpoints.out);
+  //testEndpoint.connect(hr.endpoints.out);
 
   describe('static', function () {
     testStep.checkStepStatic(manager, hr);
@@ -53,6 +56,18 @@ describe('http-routing', function () {
     testStep.checkStepLivecycle(manager, hr, function (step, state, livecycle) {
       if (state === 'running' && !wasRunning) {
         wasRunning = true;
+
+        const httpServer = step.manager.moduleGet(step._getHttpServerKey());
+        console.log(`http: ${httpServer}`);
+
+        request(httpServer.listen())
+          .get('/r1x')
+          .expect(200)
+          .expect(function (res) {
+            console.log('GET 200');
+            if (res.text !== 'OK') throw Error("not OK");
+          });
+
       }
 
       if (state === 'stopped' && wasRunning) {

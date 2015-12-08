@@ -8,12 +8,6 @@ const route = require('koa-route');
 const httpRoutingStep = Object.assign({}, parentStep, {
 	"name": "kronos-http-routing",
 	"description": "routes http requests to endpoints",
-	"endpoints": {
-		"out": {
-			"out": true,
-			"active": true
-		}
-	},
 	initialize(manager, scopeReporter, name, stepConfiguration, endpoints, props) {
 		parentStep.initialize(manager, scopeReporter, name, stepConfiguration, endpoints, props);
 
