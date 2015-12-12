@@ -27,6 +27,10 @@ describe('http-routing', function () {
     name: "myStep",
     type: "kronos-http-routing",
 
+    listener: {
+      port: 1234
+    },
+
     routes: {
       "r1/:id": {},
       "r2": {
@@ -57,17 +61,13 @@ describe('http-routing', function () {
       if (state === 'running' && !wasRunning) {
         wasRunning = true;
 
-        const httpServer = step.manager.moduleGet(step._getHttpServerKey());
-        console.log(`http: ${httpServer}`);
-
-        request(httpServer.listen())
+        request(step.listener.server.listen())
           .get('/r1x')
           .expect(200)
           .expect(function (res) {
             console.log('GET 200');
             if (res.text !== 'OK') throw Error("not OK");
           });
-
       }
 
       if (state === 'stopped' && wasRunning) {
