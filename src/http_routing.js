@@ -11,20 +11,36 @@ const httpRoutingStep = Object.assign({}, parentStep, {
 	initialize(manager, scopeReporter, name, stepConfiguration, endpoints, props) {
 		parentStep.initialize(manager, scopeReporter, name, stepConfiguration, endpoints, props);
 
-		console.log(`routes: ${JSON.stringify(stepConfiguration.routes)}`);
+		props.routes = {
+			value: stepConfiguration.routes
+		};
+	},
 
+	_doRegisterUrls() {
 		const routes = [];
 
-		for (let path in stepConfiguration.routes) {
-			const rp = stepConfiguration.routes[path];
-			const method = rp.method || 'get';
+		for (let path in this.routes) {
+			const rp = this.routes[path];
+			let method;
 
-			const r = route.get(path, (ctx) => {
+			if (rp.method) {
+				method = route[rp.method.toLowerCase()];
+			} else {
+				method = route.get;
+			}
+
+			//			console.log(`routes: ${path} ${JSON.stringify(rp)}`);
+
+			const r = method(path, (ctx) => {
 				//const data = ctx.request;
+				console.log(`in method`);
 				ctx.body = "unknown TODO";
 			});
+
+			this.registerRoute(r);
 		}
 	}
+
 });
 
 exports.registerWithManager = function (manager) {

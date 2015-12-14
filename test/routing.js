@@ -32,9 +32,9 @@ describe('http-routing', function () {
     },
 
     routes: {
-      "r1/:id": {},
+      "r1": {},
       "r2": {
-        "method": "DELETE"
+        "method": "delete"
       }
     }
   });
@@ -57,21 +57,28 @@ describe('http-routing', function () {
 
   describe('live-cycle', function () {
     let wasRunning = false;
-    testStep.checkStepLivecycle(manager, hr, function (step, state, livecycle) {
+    testStep.checkStepLivecycle(manager, hr, function (step, state, livecycle, done) {
       if (state === 'running' && !wasRunning) {
         wasRunning = true;
 
+        console.log(`running....`);
         request(step.listener.server.listen())
-          .get('/r1x')
+          .get('/r1')
           .expect(200)
           .expect(function (res) {
             console.log('GET 200');
             if (res.text !== 'OK') throw Error("not OK");
-          });
-      }
+            console.log(`end running....`);
 
-      if (state === 'stopped' && wasRunning) {
-        //assert.equal(manager.flows['sample'].name, 'sample');
+            done();
+          });
+        setTimeout(done, 100);
+      } else {
+        if (state === 'stopped' && wasRunning) {
+          //assert.equal(manager.flows['sample'].name, 'sample');
+        }
+
+        done();
       }
     });
   });
