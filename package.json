@@ -24,7 +24,7 @@
   "dependencies": {
     "koa-route": "^3.0.0",
     "kronos-adapter-inbound-http": "^2.1.0",
-    "kronos-step": "^2.8.0"
+    "kronos-step": "^2.9.0"
   },
   "devDependencies": {
     "babel-cli": "^6.3.17",
