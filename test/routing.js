@@ -32,8 +32,13 @@ describe('http-routing', function () {
     },
 
     routes: {
-      "r1": {},
-      "r2": {
+      "/r1": {
+        "target": "out1",
+        "content": {
+          "key1": "value1"
+        }
+      },
+      "/r2": {
         "method": "delete"
       }
     }
@@ -46,10 +51,10 @@ describe('http-routing', function () {
 
   testEndpoint.receive(function* () {
     let request = yield;
-    console.log(`got request: ${request}`);
+    console.log(`got request: ${JSON.stringify(request)}`);
   });
 
-  //testEndpoint.connect(hr.endpoints.out);
+  testEndpoint.connect(hr.endpoints.out1);
 
   describe('static', function () {
     testStep.checkStepStatic(manager, hr);
@@ -61,18 +66,15 @@ describe('http-routing', function () {
       if (state === 'running' && !wasRunning) {
         wasRunning = true;
 
-        console.log(`running....`);
         request(step.listener.server.listen())
           .get('/r1')
           .expect(200)
-          .expect(function (res) {
-            console.log('GET 200');
+          .then(function (res) {
+            //console.log('GET 200');
             if (res.text !== 'OK') throw Error("not OK");
-            console.log(`end running....`);
 
             done();
-          });
-        setTimeout(done, 100);
+          }).catch(done);
       } else {
         if (state === 'stopped' && wasRunning) {
           //assert.equal(manager.flows['sample'].name, 'sample');
