@@ -16,12 +16,14 @@ const httpRoutingStep = Object.assign({}, parentStep, {
 			const r = stepConfiguration.routes[path];
 
 			if (r.target) {
-				r.endpoint = endpoints[r.target] = Step.createEndpoint(r.target, {
+				const name = r.name || path;
+				r.endpoint = endpoints[name] = Step.createEndpoint(name, {
+					target: r.target,
 					out: true,
 					active: true
 				});
 
-				console.log(`endpoint: ${r.target}`);
+				//console.log(`endpoint: ${r.endpoint}`);
 			}
 		}
 
@@ -43,16 +45,20 @@ const httpRoutingStep = Object.assign({}, parentStep, {
 
 			this.registerRoute(method(path, (ctx) => {
 				const request = ctx.request;
-				//console.log(`in method: ${request}`);
+				const info = {
+					path: request.path
+				};
+				//console.log(`in method: ${ctx.req}`);
 
 				if (r.content) {
 					r.endpoint.send({
-						info: path,
+						info: info,
 						content: r.content
 					});
 				} else {
 					r.endpoint.send({
-						info: path
+						info: info,
+						stream: ctx.req
 					});
 				}
 				ctx.body = "OK";

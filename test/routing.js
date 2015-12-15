@@ -33,12 +33,14 @@ describe('http-routing', function () {
 
     routes: {
       "/r1": {
+        "name": "ep1",
         "target": "out1",
         "content": {
           "key1": "value1"
         }
       },
-      "/r2": {
+      "/r2/:id": {
+        "target": "out1",
         "method": "delete"
       }
     }
@@ -49,15 +51,20 @@ describe('http-routing', function () {
     "passive": true
   });
 
+  let ep1Request;
   testEndpoint.receive(function* () {
-    let request = yield;
-    console.log(`got request: ${JSON.stringify(request)}`);
+    ep1Request = yield;
+    //console.log(`got request: ${JSON.stringify(ep1Request)}`);
   });
 
-  testEndpoint.connect(hr.endpoints.out1);
+  testEndpoint.connect(hr.endpoints.ep1);
 
   describe('static', function () {
     testStep.checkStepStatic(manager, hr);
+    it('has endpoints', function () {
+      assert.equal(hr.endpoints.ep1.name, "ep1");
+      assert.equal(hr.endpoints['/r2/:id'].name, "/r2/:id");
+    });
   });
 
   describe('live-cycle', function () {
@@ -70,10 +77,16 @@ describe('http-routing', function () {
           .get('/r1')
           .expect(200)
           .then(function (res) {
-            //console.log('GET 200');
-            if (res.text !== 'OK') throw Error("not OK");
+            try {
+              assert.equal(ep1Request.info.path, '/r1');
+              if (res.text !== 'OK') throw Error("not OK");
 
-            done();
+              done();
+
+            } catch (e) {
+              console.log(`Error: ${e}`);
+              done(e);
+            }
           }).catch(done);
       } else {
         if (state === 'stopped' && wasRunning) {
