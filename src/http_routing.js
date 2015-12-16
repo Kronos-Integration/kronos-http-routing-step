@@ -15,16 +15,14 @@ const httpRoutingStep = Object.assign({}, parentStep, {
 		for (let path in stepConfiguration.routes) {
 			const r = stepConfiguration.routes[path];
 
-			if (r.target) {
-				const name = r.name || path;
-				r.endpoint = endpoints[name] = Step.createEndpoint(name, {
-					target: r.target,
-					out: true,
-					active: true
-				});
-
-				//console.log(`endpoint: ${r.endpoint}`);
-			}
+			const name = r.name || path;
+			const endpointOptions = {
+				out: true,
+				active: true,
+				target: r.target
+			};
+			r.endpoint = endpoints[name] = Step.createEndpoint(name, endpointOptions);
+			//console.log(`endpoint: ${r.endpoint}`);
 		}
 
 		props.routes = {
@@ -46,9 +44,8 @@ const httpRoutingStep = Object.assign({}, parentStep, {
 			this.registerRoute(method(path, (ctx) => {
 				const request = ctx.request;
 				const info = {
-					path: request.path
+					request: request
 				};
-				//console.log(`in method: ${ctx.req}`);
 
 				if (r.content) {
 					r.endpoint.send({
