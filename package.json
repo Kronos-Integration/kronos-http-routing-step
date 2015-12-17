@@ -23,7 +23,7 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-http-routing-step#readme",
   "dependencies": {
     "koa-route": "^3.0.0",
-    "kronos-adapter-inbound-http": "^2.1.1",
+    "kronos-adapter-inbound-http": "^2.1.2",
     "kronos-step": "^2.9.0"
   },
   "devDependencies": {
@@ -32,8 +32,8 @@
     "babel-preset-es2015": "^6.3.13",
     "chai": "3.4.1",
     "chai-as-promised": "5.1.0",
-    "istanbul": "^0.4.0",
-    "kronos-test-step": "^2.1.0",
+    "istanbul": "^0.4.1",
+    "kronos-test-step": "^2.2.0",
     "mocha": "2.3.4",
     "semantic-release": "6.0.3",
     "supertest": "^1.1.0",
