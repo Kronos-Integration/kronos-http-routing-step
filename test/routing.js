@@ -7,20 +7,18 @@ const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
-  request = require("supertest-as-promised")(Promise);
+  request = require("supertest-as-promised")(Promise),
+  path = require('path'),
+  fs = require('fs'),
+  testStep = require('kronos-test-step'),
+  BaseStep = require('kronos-step');
 
 chai.use(require("chai-as-promised"));
-
-
-const path = require('path'),
-  fs = require('fs');
-
-const testStep = require('kronos-test-step'),
-  BaseStep = require('kronos-step');
 
 const manager = testStep.managerMock;
 
 require('../lib/http_routing').registerWithManager(manager);
+require('kronos-adapter-inbound-http').registerWithManager(manager);
 
 describe('http-routing', function () {
   const hr = manager.steps['kronos-http-routing'].createInstance(manager, undefined, {
@@ -28,7 +26,9 @@ describe('http-routing', function () {
     type: "kronos-http-routing",
 
     listener: {
-      port: 1234
+      name: "my-listener",
+      port: 1234,
+      logLevel: "error"
     },
 
     routes: {
@@ -84,6 +84,10 @@ describe('http-routing', function () {
       assert.equal(hr.endpoints.ep1.name, "ep1");
       assert.equal(hr.endpoints.ep2.name, "ep2");
       assert.equal(hr.endpoints['/r3/:id'].name, "/r3/:id");
+    });
+
+    it('has logLevel', function () {
+      assert.equal(hr.listener.logLevel, "error");
     });
   });
 
