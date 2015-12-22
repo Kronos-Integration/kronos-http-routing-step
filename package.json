@@ -23,7 +23,7 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-http-routing-step#readme",
   "dependencies": {
     "koa-route": "^3.0.0",
-    "kronos-adapter-inbound-http": "^3.2.0",
+    "kronos-adapter-inbound-http": "^3.2.1",
     "kronos-step": "^2.9.0"
   },
   "devDependencies": {
