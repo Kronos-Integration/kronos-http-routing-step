@@ -31,13 +31,16 @@ const httpRoutingStep = Object.assign({}, parentStep, {
 	},
 
 	_doRegisterUrls() {
+		const self = this;
 		for (let path in this.routes) {
 			const r = this.routes[path];
-			let method;
+			let method, methodName;
 
 			if (r.method) {
-				method = route[r.method.toLowerCase()];
+				methodName = r.method.toLowerCase();
+				method = route[methodName];
 			} else {
+				methodName = 'get';
 				method = route.get;
 			}
 
@@ -46,6 +49,8 @@ const httpRoutingStep = Object.assign({}, parentStep, {
 				const info = {
 					request: request
 				};
+
+				this.info(`${methodName} ${path}`);
 
 				if (r.content) {
 					r.endpoint.send({
