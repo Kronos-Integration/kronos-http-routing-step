@@ -31,7 +31,6 @@ const httpRoutingStep = Object.assign({}, parentStep, {
 	},
 
 	_doRegisterUrls() {
-		const self = this;
 		for (let path in this.routes) {
 			const r = this.routes[path];
 			let method, methodName;
@@ -44,13 +43,15 @@ const httpRoutingStep = Object.assign({}, parentStep, {
 				method = route.get;
 			}
 
-			this.registerRoute(method(path, (ctx) => {
+			this.info(`add route: ${methodName} ${path}`);
+
+			this.registerRoute(method(path, ctx => {
+				this.info(`${methodName} ${path}`);
+
 				const request = ctx.request;
 				const info = {
 					request: request
 				};
-
-				this.info(`${methodName} ${path}`);
 
 				if (r.content) {
 					r.endpoint.send({
@@ -67,7 +68,6 @@ const httpRoutingStep = Object.assign({}, parentStep, {
 			}));
 		}
 	}
-
 });
 
 exports.registerWithManager = function (manager) {
