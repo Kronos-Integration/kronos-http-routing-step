@@ -15,14 +15,13 @@ const httpRoutingStep = Object.assign({}, parentStep, {
 		for (let path in stepConfiguration.routes) {
 			const r = stepConfiguration.routes[path];
 
-			const name = r.name || path;
+			const eName = r.name || path;
 			const endpointOptions = {
 				out: true,
 				active: true,
 				target: r.target
 			};
-			r.endpoint = endpoints[name] = Step.createEndpoint(name, endpointOptions);
-			//console.log(`endpoint: ${r.endpoint}`);
+			r.endpoint = endpoints[eName] = Step.createEndpoint(eName, endpointOptions);
 		}
 
 		props.routes = {
@@ -49,22 +48,28 @@ const httpRoutingStep = Object.assign({}, parentStep, {
 				this.info(`${methodName} ${path}`);
 
 				const request = ctx.request;
-				const info = {
-					request: request
+				const rout = {
+					info: {
+						request: request
+					}
 				};
 
 				if (r.content) {
-					r.endpoint.send({
-						info: info,
-						content: r.content
-					});
+					rout.content = r.content;
 				} else {
-					r.endpoint.send({
-						info: info,
-						stream: ctx.req
+					rout.stream = ctx.req;
+				}
+
+				const promise = r.endpoint.send(rout).value;
+
+				if (promise) {
+					return promise.then(f => {
+						this.info(`${methodName} ${path}: ${f}`);
+						ctx.body = f;
 					});
 				}
-				ctx.body = "OK";
+
+				this.warn(`${methodName} ${path}: unknown result ${promise}`);
 			}));
 		}
 	}

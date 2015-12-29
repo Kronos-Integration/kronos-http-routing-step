@@ -56,7 +56,10 @@ describe('http-routing', function () {
   });
   let ep1Request;
   ep1TestEndpoint.receive(function* () {
-    ep1Request = yield;
+    do {
+      ep1Request = yield Promise.resolve("OK");
+    }
+    while (true);
   });
   ep1TestEndpoint.connect(hr.endpoints.ep1);
 
@@ -68,13 +71,14 @@ describe('http-routing', function () {
   let ep2Request;
   let ep2Data;
   ep2TestEndpoint.receive(function* () {
-    ep2Request = yield;
-    //ep2Request.stream.pipe(process.stdout);
-    ep2Request.stream.on('data', function (chunk) {
-      ep2Data = chunk;
-      //console.log('got %d bytes of data', chunk.length);
-    });
-
+    do {
+      ep2Request = yield Promise.resolve("OK");
+      //ep2Request.stream.pipe(process.stdout);
+      ep2Request.stream.on('data', function (chunk) {
+        ep2Data = chunk;
+        //console.log('got %d bytes of data', chunk.length);
+      });
+    } while (true);
   });
   ep2TestEndpoint.connect(hr.endpoints.ep2);
 
