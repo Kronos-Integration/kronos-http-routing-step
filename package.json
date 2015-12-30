@@ -2,7 +2,9 @@
   "name": "kronos-http-routing-step",
   "version": "0.0.0",
   "description": "step to rout http requests to endpoints",
-  "keywords": ["kronos-step"],
+  "keywords": [
+    "kronos-step"
+  ],
   "main": "lib/http_routing.js",
   "esnext:main": "src/http_routing.js",
   "scripts": {
@@ -23,7 +25,7 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-http-routing-step#readme",
   "dependencies": {
     "koa-route": "^3.0.0",
-    "kronos-adapter-inbound-http": "^3.4.1",
+    "kronos-adapter-inbound-http": "^3.4.2",
     "kronos-step": "^2.12.1"
   },
   "devDependencies": {
@@ -39,13 +41,16 @@
     "supertest": "^1.1.0",
     "supertest-as-promised": "^2.0.2"
   },
-  "contributors": [{
-    "name": "Torsten Link",
-    "email": "torstenlink@gmx.de"
-  }, {
-    "name": "Markus Felten",
-    "email": "markus.felten@gmx.de"
-  }],
+  "contributors": [
+    {
+      "name": "Torsten Link",
+      "email": "torstenlink@gmx.de"
+    },
+    {
+      "name": "Markus Felten",
+      "email": "markus.felten@gmx.de"
+    }
+  ],
   "license": "BSD-2-Clause",
   "engines": {
     "node": ">=4.2.1"
