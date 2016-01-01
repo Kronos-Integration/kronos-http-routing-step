@@ -8,10 +8,9 @@ const chai = require('chai'),
   expect = chai.expect,
   should = chai.should(),
   request = require("supertest-as-promised")(Promise),
-  path = require('path'),
-  fs = require('fs'),
   testStep = require('kronos-test-step'),
-  BaseStep = require('kronos-step');
+  BaseStep = require('kronos-step'),
+  endpoint = BaseStep.endpoint;
 
 chai.use(require("chai-as-promised"));
 
@@ -50,37 +49,33 @@ describe('http-routing', function () {
     }
   });
 
-  const ep1TestEndpoint = BaseStep.createEndpoint('ep1test', {
-    "in": true,
-    "passive": true
-  });
-  let ep1Request;
-  ep1TestEndpoint.receive(function* () {
-    do {
-      ep1Request = yield Promise.resolve("OK");
-    }
-    while (true);
-  });
-  ep1TestEndpoint.connect(hr.endpoints.ep1);
+  const ep1TestEndpoint = new endpoint.ReceiveEndpoint('ep1test');
 
-  const ep2TestEndpoint = BaseStep.createEndpoint('ep2test', {
-    "in": true,
-    "passive": true
-  });
+  let ep1Request;
+  ep1TestEndpoint.receive = request => {
+    ep1Request = request;
+    return Promise.resolve("ok");
+  };
+
+  ep1TestEndpoint.connected = hr.endpoints.ep1;
+
+
+  const ep2TestEndpoint = new endpoint.ReceiveEndpoint('ep2test');
 
   let ep2Request;
   let ep2Data;
-  ep2TestEndpoint.receive(function* () {
-    do {
-      ep2Request = yield Promise.resolve("OK");
-      //ep2Request.stream.pipe(process.stdout);
-      ep2Request.stream.on('data', function (chunk) {
-        ep2Data = chunk;
-        //console.log('got %d bytes of data', chunk.length);
-      });
-    } while (true);
-  });
-  ep2TestEndpoint.connect(hr.endpoints.ep2);
+
+  ep2TestEndpoint.receive = request => {
+    ep2Request = request;
+    ep2Request.stream.on('data', function (chunk) {
+      ep2Data = chunk;
+      //console.log('got %d bytes of data', chunk.length);
+    });
+
+    return Promise.resolve("ok");
+  };
+
+  ep2TestEndpoint.connected = hr.endpoints.ep2;
 
   describe('static', function () {
     testStep.checkStepStatic(manager, hr);

@@ -2,75 +2,69 @@
 
 "use strict";
 
-const parentStep = require('kronos-adapter-inbound-http').AdapterInboundHttp,
-	route = require('koa-route'),
-	Step = require('kronos-step');
+const route = require('koa-route'),
+	step = require('kronos-step');
 
-const httpRoutingStep = Object.assign({}, parentStep, {
-	"name": "kronos-http-routing",
-	"description": "routes http requests to endpoints",
-	initialize(manager, scopeReporter, name, stepConfiguration, endpoints, props) {
-		parentStep.initialize(manager, scopeReporter, name, stepConfiguration, endpoints, props);
+class RouteSendEndpoint extends step.endpoint.SendEndpoint {
+	constructor(name, owner, path, method, content) {
+		super(name, owner);
 
-		for (let path in stepConfiguration.routes) {
-			const r = stepConfiguration.routes[path];
+		Object.defineProperty(this, 'path', path);
+		Object.defineProperty(this, 'method', method.toLowerCase());
+		Object.defineProperty(this, 'content', content);
+	}
 
-			const eName = r.name || path;
-			const endpointOptions = {
-				out: true,
-				active: true,
-				target: r.target
+	get route() {
+		const method = route[this.method];
+
+		return method(this.path, ctx => {
+			this.owner.info(`${this.method} ${this.path}`);
+
+			const request = ctx.request;
+			const rout = {
+				info: {
+					request: request
+				}
 			};
-			r.endpoint = endpoints[eName] = Step.createEndpoint(eName, endpointOptions);
-		}
 
-		props.routes = {
-			value: stepConfiguration.routes
-		};
-	},
-
-	_doRegisterUrls() {
-		for (let path in this.routes) {
-			const r = this.routes[path];
-			let method, methodName;
-
-			if (r.method) {
-				methodName = r.method.toLowerCase();
-				method = route[methodName];
+			if (this.content) {
+				rout.content = this.content;
 			} else {
-				methodName = 'get';
-				method = route.get;
+				rout.stream = ctx.req;
 			}
 
-			this.info(`add route: ${methodName} ${path}`);
+			return this.send(rout).then(response => {
+				this.owner.info(`${this.method} ${this.path}: ${response}`);
+				ctx.body = response;
+			});
+		});
+	}
+}
 
-			this.registerRoute(method(path, ctx => {
-				this.info(`${methodName} ${path}`);
+const httpRoutingStep = Object.assign({}, step.Step, {
+	"name": "kronos-http-routing",
+	"description": "routes http requests to endpoints",
+	initialize(manager, scopeReporter, name, conf, props) {
+		props.listener = {
+			value: manager.serviceDeclare('koa', conf.listener || 'default-listener')
+		};
 
-				const request = ctx.request;
-				const rout = {
-					info: {
-						request: request
+		props._start = {
+			value: function () {
+				return this.listener.start().then(
+					r => {
+						this.listener.koa.use(route);
 					}
-				};
+				);
+				this.listener.koa.use(route);
+			}
+		}
+	},
 
-				if (r.content) {
-					rout.content = r.content;
-				} else {
-					rout.stream = ctx.req;
-				}
-
-				const promise = r.endpoint.send(rout).value;
-
-				if (promise) {
-					return promise.then(f => {
-						this.info(`${methodName} ${path}: ${f}`);
-						ctx.body = f;
-					});
-				}
-
-				this.warn(`${methodName} ${path}: unknown result ${promise}`);
-			}));
+	createEndpoints(scopeReporter, conf) {
+		for (let path in conf.routes) {
+			const r = conf.routes[path];
+			this.addEndpoint(new RouteSendEndpoint(r.name || path, this, path, r.method || 'get'));
 		}
 	}
 });
