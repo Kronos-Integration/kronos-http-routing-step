@@ -30,7 +30,7 @@ describe('http-routing', function () {
       logLevel: "error"
     },
 
-    routes: {
+    endpoints: {
       "/r1": {
         "name": "ep1",
         "target": "out1",
@@ -54,10 +54,12 @@ describe('http-routing', function () {
   let ep1Request;
   ep1TestEndpoint.receive = request => {
     ep1Request = request;
+    console.log(`ep1: ${request.info}`);
+
     return Promise.resolve("ok");
   };
 
-  ep1TestEndpoint.connected = hr.endpoints.ep1;
+  hr.endpoints.ep1.connected = ep1TestEndpoint;
 
 
   const ep2TestEndpoint = new endpoint.ReceiveEndpoint('ep2test');
@@ -69,13 +71,24 @@ describe('http-routing', function () {
     ep2Request = request;
     ep2Request.stream.on('data', function (chunk) {
       ep2Data = chunk;
-      //console.log('got %d bytes of data', chunk.length);
     });
+    console.log(`ep2:`);
+    return Promise.resolve("ok");
+  };
+
+  hr.endpoints.ep2.connected = ep2TestEndpoint
+
+  const ep3TestEndpoint = new endpoint.ReceiveEndpoint('ep3test');
+
+  let ep3Request;
+  ep3TestEndpoint.receive = request => {
+    ep3Request = request;
+    console.log(`ep3:`);
 
     return Promise.resolve("ok");
   };
 
-  ep2TestEndpoint.connected = hr.endpoints.ep2;
+  hr.endpoints['/r3/:id'].connected = ep3TestEndpoint;
 
   describe('static', function () {
     testStep.checkStepStatic(manager, hr);
