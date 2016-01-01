@@ -18,7 +18,7 @@ chai.use(require("chai-as-promised"));
 const manager = testStep.managerMock;
 
 require('../lib/http_routing').registerWithManager(manager);
-require('kronos-adapter-inbound-http').registerWithManager(manager);
+require('kronos-koa-service').registerWithManager(manager);
 
 describe('http-routing', function () {
   const hr = manager.steps['kronos-http-routing'].createInstance(manager, undefined, {
