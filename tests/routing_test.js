@@ -54,7 +54,7 @@ describe('http-routing', function () {
   let ep1Request;
   ep1TestEndpoint.receive = request => {
     ep1Request = request;
-    console.log(`ep1: ${request.info.request.url}`);
+    console.log(`A ep1: ${request.info.request.url}`);
 
     return Promise.resolve({
       message: request.info.request.url
@@ -116,10 +116,10 @@ describe('http-routing', function () {
         request(app)
           .get('/r1')
           .expect(200)
-          .then(function (res) {
+          .then(res => {
             try {
               assert.equal(ep1Request.info.request.path, '/r1');
-              console.log(`res: ` + res.test);
+              console.log(`XXXXXX res: ` + res.test);
               if (res.text !== 'OK') throw Error("not OK");
 
               request(app)
@@ -129,7 +129,7 @@ describe('http-routing', function () {
                   species: 'cat'
                 })
                 .expect(200)
-                .then(function (res) {
+                .then(res => {
                   try {
                     assert.equal(ep2Request.info.request.path, '/r2');
                     assert.equal(JSON.parse(ep2Data).name, 'Manny');
