@@ -54,9 +54,11 @@ describe('http-routing', function () {
   let ep1Request;
   ep1TestEndpoint.receive = request => {
     ep1Request = request;
-    console.log(`ep1: ${request.info}`);
+    console.log(`ep1: ${request.info.request.url}`);
 
-    return Promise.resolve("ok");
+    return Promise.resolve({
+      message: request.info.request.url
+    });
   };
 
   hr.endpoints.ep1.connected = ep1TestEndpoint;
@@ -117,6 +119,7 @@ describe('http-routing', function () {
           .then(function (res) {
             try {
               assert.equal(ep1Request.info.request.path, '/r1');
+              console.log(`res: ` + res.test);
               if (res.text !== 'OK') throw Error("not OK");
 
               request(app)
