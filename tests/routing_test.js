@@ -54,10 +54,8 @@ describe('http-routing', function () {
   let ep1Request;
   ep1TestEndpoint.receive = request => {
     ep1Request = request;
-    console.log(`A ep1: ${request.info.request.url}`);
-
     return Promise.resolve({
-      message: request.info.request.url
+      message: "returned from ep1test"
     });
   };
 
@@ -74,7 +72,6 @@ describe('http-routing', function () {
     ep2Request.stream.on('data', function (chunk) {
       ep2Data = chunk;
     });
-    console.log(`ep2:`);
     return Promise.resolve("ok");
   };
 
@@ -85,9 +82,7 @@ describe('http-routing', function () {
   let ep3Request;
   ep3TestEndpoint.receive = request => {
     ep3Request = request;
-    console.log(`ep3:`);
-
-    return Promise.resolve("ok");
+    return Promise.resolve("delete ok");
   };
 
   hr.endpoints['/r3/:id'].connected = ep3TestEndpoint;
@@ -119,8 +114,8 @@ describe('http-routing', function () {
           .then(res => {
             try {
               assert.equal(ep1Request.info.request.path, '/r1');
-              console.log(`XXXXXX res: ` + res.test);
-              if (res.text !== 'OK') throw Error("not OK");
+              const r = JSON.parse(res.text);
+              if (r.message !== 'returned from ep1test') throw Error("not OK");
 
               request(app)
                 .post('/r2')
@@ -133,7 +128,13 @@ describe('http-routing', function () {
                   try {
                     assert.equal(ep2Request.info.request.path, '/r2');
                     assert.equal(JSON.parse(ep2Data).name, 'Manny');
-                    done();
+
+                    request(app)
+                      .delete('/r3/4711')
+                      .expect(200)
+                      .then(res => {
+                        done();
+                      });
                   } catch (e) {
                     console.log(`Error: ${e}`);
                     done(e);
