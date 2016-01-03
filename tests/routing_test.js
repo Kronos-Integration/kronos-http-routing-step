@@ -75,7 +75,7 @@ describe('http-routing', function () {
     return Promise.resolve("ok");
   };
 
-  hr.endpoints.ep2.connected = ep2TestEndpoint
+  hr.endpoints.ep2.connected = ep2TestEndpoint;
 
   const ep3TestEndpoint = new endpoint.ReceiveEndpoint('ep3test');
 
