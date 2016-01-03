@@ -8,10 +8,9 @@ const chai = require('chai'),
   expect = chai.expect,
   should = chai.should(),
   request = require("supertest-as-promised")(Promise),
-  path = require('path'),
-  fs = require('fs'),
   testStep = require('kronos-test-step'),
-  BaseStep = require('kronos-step');
+  BaseStep = require('kronos-step'),
+  endpoint = BaseStep.endpoint;
 
 chai.use(require("chai-as-promised"));
 
@@ -31,7 +30,7 @@ describe('http-routing', function () {
       logLevel: "error"
     },
 
-    routes: {
+    endpoints: {
       "/r1": {
         "name": "ep1",
         "target": "out1",
@@ -50,37 +49,43 @@ describe('http-routing', function () {
     }
   });
 
-  const ep1TestEndpoint = BaseStep.createEndpoint('ep1test', {
-    "in": true,
-    "passive": true
-  });
-  let ep1Request;
-  ep1TestEndpoint.receive(function* () {
-    do {
-      ep1Request = yield Promise.resolve("OK");
-    }
-    while (true);
-  });
-  ep1TestEndpoint.connect(hr.endpoints.ep1);
+  const ep1TestEndpoint = new endpoint.ReceiveEndpoint('ep1test');
 
-  const ep2TestEndpoint = BaseStep.createEndpoint('ep2test', {
-    "in": true,
-    "passive": true
-  });
+  let ep1Request;
+  ep1TestEndpoint.receive = request => {
+    ep1Request = request;
+    return Promise.resolve({
+      message: "returned from ep1test"
+    });
+  };
+
+  hr.endpoints.ep1.connected = ep1TestEndpoint;
+
+
+  const ep2TestEndpoint = new endpoint.ReceiveEndpoint('ep2test');
 
   let ep2Request;
   let ep2Data;
-  ep2TestEndpoint.receive(function* () {
-    do {
-      ep2Request = yield Promise.resolve("OK");
-      //ep2Request.stream.pipe(process.stdout);
-      ep2Request.stream.on('data', function (chunk) {
-        ep2Data = chunk;
-        //console.log('got %d bytes of data', chunk.length);
-      });
-    } while (true);
-  });
-  ep2TestEndpoint.connect(hr.endpoints.ep2);
+
+  ep2TestEndpoint.receive = request => {
+    ep2Request = request;
+    ep2Request.stream.on('data', function (chunk) {
+      ep2Data = chunk;
+    });
+    return Promise.resolve("ok");
+  };
+
+  hr.endpoints.ep2.connected = ep2TestEndpoint
+
+  const ep3TestEndpoint = new endpoint.ReceiveEndpoint('ep3test');
+
+  let ep3Request;
+  ep3TestEndpoint.receive = request => {
+    ep3Request = request;
+    return Promise.resolve("delete ok");
+  };
+
+  hr.endpoints['/r3/:id'].connected = ep3TestEndpoint;
 
   describe('static', function () {
     testStep.checkStepStatic(manager, hr);
@@ -106,10 +111,11 @@ describe('http-routing', function () {
         request(app)
           .get('/r1')
           .expect(200)
-          .then(function (res) {
+          .then(res => {
             try {
               assert.equal(ep1Request.info.request.path, '/r1');
-              if (res.text !== 'OK') throw Error("not OK");
+              const r = JSON.parse(res.text);
+              if (r.message !== 'returned from ep1test') throw Error("not OK");
 
               request(app)
                 .post('/r2')
@@ -118,11 +124,17 @@ describe('http-routing', function () {
                   species: 'cat'
                 })
                 .expect(200)
-                .then(function (res) {
+                .then(res => {
                   try {
                     assert.equal(ep2Request.info.request.path, '/r2');
                     assert.equal(JSON.parse(ep2Data).name, 'Manny');
-                    done();
+
+                    request(app)
+                      .delete('/r3/4711')
+                      .expect(200)
+                      .then(res => {
+                        done();
+                      });
                   } catch (e) {
                     console.log(`Error: ${e}`);
                     done(e);
