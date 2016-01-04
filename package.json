@@ -23,7 +23,7 @@
   "dependencies": {
     "koa-route": "^3.0.0",
     "kronos-koa-service": "^1.0.0",
-    "kronos-step": "^3.0.1"
+    "kronos-step": "^3.1.0"
   },
   "devDependencies": {
     "chai": "3.4.1",
