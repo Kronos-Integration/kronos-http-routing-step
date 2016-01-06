@@ -31,16 +31,16 @@ describe('http-routing', function () {
     },
 
     endpoints: {
-      "/r1": {
-        "name": "ep1",
+      "ep1": {
+        "path": "/r1",
         "target": "out1",
         "content": {
           "key1": "value1"
         }
       },
-      "/r2": {
+      "ep2": {
         "method": "post",
-        "name": "ep2",
+        "path": "/r2",
         "target": "out1"
       },
       "/r3/:id": {
