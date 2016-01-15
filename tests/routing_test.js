@@ -69,7 +69,7 @@ describe('http-routing', function () {
 
   ep2TestEndpoint.receive = request => {
     ep2Request = request;
-    ep2Request.stream.on('data', function (chunk) {
+    ep2Request.stream.on('data', chunk => {
       ep2Data = chunk;
     });
     return Promise.resolve("ok");
@@ -87,22 +87,22 @@ describe('http-routing', function () {
 
   hr.endpoints['/r3/:id'].connected = ep3TestEndpoint;
 
-  describe('static', function () {
+  describe('static', () => {
     testStep.checkStepStatic(manager, hr);
-    it('has endpoints', function () {
+    it('has endpoints', () => {
       assert.equal(hr.endpoints.ep1.name, "ep1");
       assert.equal(hr.endpoints.ep2.name, "ep2");
       assert.equal(hr.endpoints['/r3/:id'].name, "/r3/:id");
     });
 
-    it('has logLevel', function () {
+    it('has logLevel', () => {
       assert.equal(hr.listener.logLevel, "error");
     });
   });
 
-  describe('live-cycle', function () {
+  describe('live-cycle', () => {
     let wasRunning = false;
-    testStep.checkStepLivecycle(manager, hr, function (step, state, livecycle, done) {
+    testStep.checkStepLivecycle(manager, hr, (step, state, livecycle, done) => {
       if (state === 'running' && !wasRunning) {
         wasRunning = true;
 
