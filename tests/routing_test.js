@@ -12,14 +12,12 @@ const chai = require('chai'),
   BaseStep = require('kronos-step'),
   endpoint = BaseStep.endpoint;
 
-chai.use(require("chai-as-promised"));
-
 const manager = testStep.managerMock;
 
 require('../lib/http_routing').registerWithManager(manager);
 require('kronos-koa-service').registerWithManager(manager);
 
-describe('http-routing', function () {
+describe('http-routing', () => {
   const hr = manager.steps['kronos-http-routing'].createInstance(manager, undefined, {
     name: "myStep",
     type: "kronos-http-routing",
