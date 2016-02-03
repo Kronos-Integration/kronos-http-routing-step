@@ -8,25 +8,25 @@ const chai = require('chai'),
   expect = chai.expect,
   should = chai.should(),
   request = require("supertest-as-promised")(Promise),
+  ksm = require('kronos-service-manager'),
   testStep = require('kronos-test-step'),
-  BaseStep = require('kronos-step'),
-  endpoint = BaseStep.endpoint;
+  endpoint = require('kronos-endpoint');
 
-const manager = testStep.managerMock;
 
-require('../lib/http_routing').registerWithManager(manager);
-require('kronos-koa-service').registerWithManager(manager);
+let manager;
 
-describe('http-routing', () => {
-  const hr = manager.steps['kronos-http-routing'].createInstance(manager, undefined, {
+before(done => {
+  ksm.manager({}, [require('kronos-service-koa'), require('../lib/http_routing')]).then(m => {
+    manager = m;
+    done();
+  });
+});
+
+it('http-routing', () => {
+  const hr = manager.steps['kronos-http-routing'].createInstance({
     name: "myStep",
     type: "kronos-http-routing",
-
-    listener: {
-      name: "my-listener",
-      port: 1234,
-      logLevel: "error"
-    },
+    listener: "my-listener",
 
     endpoints: {
       "ep1": {
@@ -45,7 +45,7 @@ describe('http-routing', () => {
         "method": "delete"
       }
     }
-  });
+  }, manager);
 
   const ep1TestEndpoint = new endpoint.ReceiveEndpoint('ep1test');
 
@@ -58,7 +58,6 @@ describe('http-routing', () => {
   };
 
   hr.endpoints.ep1.connected = ep1TestEndpoint;
-
 
   const ep2TestEndpoint = new endpoint.ReceiveEndpoint('ep2test');
 
@@ -91,10 +90,6 @@ describe('http-routing', () => {
       assert.equal(hr.endpoints.ep1.name, "ep1");
       assert.equal(hr.endpoints.ep2.name, "ep2");
       assert.equal(hr.endpoints['/r3/:id'].name, "/r3/:id");
-    });
-
-    it('has logLevel', () => {
-      assert.equal(hr.listener.logLevel, "error");
     });
   });
 
