@@ -16,7 +16,10 @@ const chai = require('chai'),
 let manager;
 
 before(done => {
-  ksm.manager({}, [require('kronos-service-koa'), require('../lib/http_routing')]).then(m => {
+  ksm.manager([{}, {
+    name: "my-listener",
+    hostname: "localhost"
+  }], [require('kronos-service-koa'), require('../lib/http_routing')]).then(m => {
     manager = m;
     done();
   });
