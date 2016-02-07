@@ -69,7 +69,7 @@ it('http-routing', () => {
 
   ep2TestEndpoint.receive = request => {
     ep2Request = request;
-    ep2Request.stream.on('data', chunk => {
+    ep2Request.payload.on('data', chunk => {
       ep2Data = chunk;
     });
     return Promise.resolve("ok");
