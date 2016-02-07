@@ -19,7 +19,7 @@ before(done => {
   ksm.manager([{}, {
     name: "my-listener",
     hostname: "localhost"
-  }], [require('kronos-service-koa'), require('../lib/http_routing')]).then(m => {
+  }], [require('kronos-service-registry'), require('kronos-service-koa'), require('../lib/http_routing')]).then(m => {
     manager = m;
     done();
   });
@@ -33,6 +33,7 @@ it('http-routing', () => {
 
     endpoints: {
       "ep1": {
+        "serviceName": "service1",
         "path": "/r1",
         "target": "out1",
         "content": {
