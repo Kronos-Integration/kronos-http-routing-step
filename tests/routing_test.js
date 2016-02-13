@@ -42,7 +42,7 @@ it('http-routing', () => {
         "path": "/r2",
         "target": "out1"
       },
-      "/r3/:id": {
+      "/r3/:id/:all": {
         "method": "delete"
       }
     }
@@ -52,13 +52,13 @@ it('http-routing', () => {
 
   let epData;
 
-  epTestEndpoint.receive = (ctx, a, b, c) => {
+  epTestEndpoint.receive = (ctx, args) => {
     ctx.req.on('data', chunk => {
       epData = chunk;
     });
 
     ctx.body = {
-      args: [a, b, c],
+      args: args,
       path: ctx.request.path,
       method: ctx.method
     };
@@ -67,14 +67,15 @@ it('http-routing', () => {
 
   hr.endpoints.ep1.connected = epTestEndpoint;
   hr.endpoints.ep2.connected = epTestEndpoint;
-  hr.endpoints['/r3/:id'].connected = epTestEndpoint;
+  hr.endpoints['/r3/:id/:all'].connected = epTestEndpoint;
 
   describe('static', () => {
     testStep.checkStepStatic(manager, hr);
     it('has endpoints', () => {
       assert.equal(hr.endpoints.ep1.name, "ep1");
       assert.equal(hr.endpoints.ep2.name, "ep2");
-      assert.equal(hr.endpoints['/r3/:id'].name, "/r3/:id");
+      assert.equal(hr.endpoints['/r3/:id/:all'].name, "/r3/:id/:all");
+      assert.equal(hr.endpoints['/r3/:id/:all'].method, "DELETE");
     });
   });
 
@@ -110,12 +111,13 @@ it('http-routing', () => {
                     assert.equal(JSON.parse(epData).name, 'Manny');
 
                     request(app)
-                      .delete('/r3/4711')
+                      .delete('/r3/4711/all')
                       .expect(200)
                       .then(res => {
                         const r = JSON.parse(res.text);
-                        assert.equal(r.path, '/r3/4711');
-                        assert.equal(r.args[0], '4711');
+                        assert.equal(r.path, '/r3/4711/all');
+                        assert.equal(r.args.all, 'all');
+                        assert.equal(r.args.id, '4711');
                         assert.equal(r.method, 'DELETE');
                         done();
                       }).catch(done);
