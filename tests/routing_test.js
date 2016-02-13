@@ -52,12 +52,13 @@ it('http-routing', () => {
 
   let epData;
 
-  epTestEndpoint.receive = ctx => {
+  epTestEndpoint.receive = (ctx, a, b, c) => {
     ctx.req.on('data', chunk => {
       epData = chunk;
     });
 
     ctx.body = {
+      args: [a, b, c],
       path: ctx.request.path,
       method: ctx.method
     };
@@ -114,6 +115,7 @@ it('http-routing', () => {
                       .then(res => {
                         const r = JSON.parse(res.text);
                         assert.equal(r.path, '/r3/4711');
+                        assert.equal(r.args[0], '4711');
                         assert.equal(r.method, 'DELETE');
                         done();
                       }).catch(done);
