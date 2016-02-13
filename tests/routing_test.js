@@ -35,10 +35,7 @@ it('http-routing', () => {
       "ep1": {
         "serviceName": "service1",
         "path": "/r1",
-        "target": "out1",
-        "content": {
-          "key1": "value1"
-        }
+        "target": "out1"
       },
       "ep2": {
         "method": "post",
@@ -51,42 +48,25 @@ it('http-routing', () => {
     }
   }, manager);
 
-  const ep1TestEndpoint = new endpoint.ReceiveEndpoint('ep1test');
+  const epTestEndpoint = new endpoint.ReceiveEndpoint('ep1test');
 
-  let ep1Request;
-  ep1TestEndpoint.receive = request => {
-    ep1Request = request;
-    return Promise.resolve({
-      message: "returned from ep1test"
+  let epData;
+
+  epTestEndpoint.receive = ctx => {
+    ctx.req.on('data', chunk => {
+      epData = chunk;
     });
+
+    ctx.body = {
+      path: ctx.request.path,
+      method: ctx.method
+    };
+    return Promise.resolve();
   };
 
-  hr.endpoints.ep1.connected = ep1TestEndpoint;
-
-  const ep2TestEndpoint = new endpoint.ReceiveEndpoint('ep2test');
-
-  let ep2Request;
-  let ep2Data;
-
-  ep2TestEndpoint.receive = request => {
-    ep2Request = request;
-    ep2Request.payload.on('data', chunk => {
-      ep2Data = chunk;
-    });
-    return Promise.resolve("ok");
-  };
-
-  hr.endpoints.ep2.connected = ep2TestEndpoint;
-
-  const ep3TestEndpoint = new endpoint.ReceiveEndpoint('ep3test');
-
-  let ep3Request;
-  ep3TestEndpoint.receive = request => {
-    ep3Request = request;
-    return Promise.resolve("delete ok");
-  };
-
-  hr.endpoints['/r3/:id'].connected = ep3TestEndpoint;
+  hr.endpoints.ep1.connected = epTestEndpoint;
+  hr.endpoints.ep2.connected = epTestEndpoint;
+  hr.endpoints['/r3/:id'].connected = epTestEndpoint;
 
   describe('static', () => {
     testStep.checkStepStatic(manager, hr);
@@ -110,9 +90,9 @@ it('http-routing', () => {
           .expect(200)
           .then(res => {
             try {
-              assert.equal(ep1Request.info.request.path, '/r1');
               const r = JSON.parse(res.text);
-              if (r.message !== 'returned from ep1test') throw Error("not OK");
+              assert.equal(r.path, '/r1');
+              assert.equal(r.method, 'GET');
 
               request(app)
                 .post('/r2')
@@ -123,15 +103,20 @@ it('http-routing', () => {
                 .expect(200)
                 .then(res => {
                   try {
-                    assert.equal(ep2Request.info.request.path, '/r2');
-                    assert.equal(JSON.parse(ep2Data).name, 'Manny');
+                    const r = JSON.parse(res.text);
+
+                    assert.equal(r.path, '/r2');
+                    assert.equal(JSON.parse(epData).name, 'Manny');
 
                     request(app)
                       .delete('/r3/4711')
                       .expect(200)
                       .then(res => {
+                        const r = JSON.parse(res.text);
+                        assert.equal(r.path, '/r3/4711');
+                        assert.equal(r.method, 'DELETE');
                         done();
-                      });
+                      }).catch(done);
                   } catch (e) {
                     console.log(`Error: ${e}`);
                     done(e);
