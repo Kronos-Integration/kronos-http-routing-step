@@ -73,6 +73,7 @@ it('http-routing', () => {
     testStep.checkStepStatic(manager, hr);
     it('has endpoints', () => {
       assert.equal(hr.endpoints.ep1.name, "ep1");
+      assert.equal(hr.endpoints.ep1.serviceName, "service1");
       assert.equal(hr.endpoints.ep2.name, "ep2");
       assert.equal(hr.endpoints['/r3/:id/:all'].name, "/r3/:id/:all");
       assert.equal(hr.endpoints['/r3/:id/:all'].method, "DELETE");
