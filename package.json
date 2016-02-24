@@ -35,7 +35,8 @@
     "mocha": "2.4.5",
     "semantic-release": "6.2.0",
     "supertest": "^1.2.0",
-    "supertest-as-promised": "^3.0.0"
+    "supertest-as-promised": "^3.0.0",
+    "cz-conventional-changelog": "1.1.5"
   },
   "contributors": [
     {
@@ -50,5 +51,10 @@
   "license": "BSD-2-Clause",
   "engines": {
     "node": ">=5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
