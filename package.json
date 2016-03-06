@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/Kronos-Integration/kronos-http-routing-step#readme",
   "dependencies": {
-    "kronos-service-koa": "2.8.0",
+    "kronos-service-koa": "2.8.1",
     "kronos-step": "4.0.5",
     "path-to-regexp": "^1.2.1"
   },
