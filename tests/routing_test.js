@@ -74,9 +74,25 @@ it('http-routing', () => {
     it('has endpoints', () => {
       assert.equal(hr.endpoints.ep1.name, "ep1");
       assert.equal(hr.endpoints.ep1.serviceName, "service1");
+      assert.deepEqual(hr.endpoints.ep1.toJSON(), {
+        method: "GET",
+        out: true,
+        path: "/r1",
+        serviceName: "service1"
+      });
       assert.equal(hr.endpoints.ep2.name, "ep2");
+      assert.deepEqual(hr.endpoints.ep2.toJSON(), {
+        method: "POST",
+        out: true,
+        path: "/r2"
+      });
       assert.equal(hr.endpoints['/r3/:id/:all'].name, "/r3/:id/:all");
       assert.equal(hr.endpoints['/r3/:id/:all'].method, "DELETE");
+      assert.deepEqual(hr.endpoints['/r3/:id/:all'].toJSON(), {
+        method: "DELETE",
+        out: true,
+        path: "/r3/:id/:all"
+      });
     });
   });
 
