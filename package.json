@@ -1,7 +1,7 @@
 {
   "name": "kronos-http-routing-step",
   "version": "0.0.0-semantic-release",
-  "description": "step to rout http requests to endpoints",
+  "description": "step to route http requests to endpoints",
   "keywords": [
     "kronos-step"
   ],
