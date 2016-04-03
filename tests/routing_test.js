@@ -30,7 +30,7 @@ it('http-routing', () => {
     name: "myStep",
     type: "kronos-http-routing",
     listener: "my-listener",
-
+    mount: "/mnt",
     endpoints: {
       "ep1": {
         "serviceName": "service1",
@@ -77,21 +77,21 @@ it('http-routing', () => {
       assert.deepEqual(hr.endpoints.ep1.toJSON(), {
         method: "GET",
         out: true,
-        path: "/r1",
+        path: "/mnt/r1",
         serviceName: "service1"
       });
       assert.equal(hr.endpoints.ep2.name, "ep2");
       assert.deepEqual(hr.endpoints.ep2.toJSON(), {
         method: "POST",
         out: true,
-        path: "/r2"
+        path: "/mnt/r2"
       });
       assert.equal(hr.endpoints['/r3/:id/:all'].name, "/r3/:id/:all");
       assert.equal(hr.endpoints['/r3/:id/:all'].method, "DELETE");
       assert.deepEqual(hr.endpoints['/r3/:id/:all'].toJSON(), {
         method: "DELETE",
         out: true,
-        path: "/r3/:id/:all"
+        path: "/mnt/r3/:id/:all"
       });
     });
   });
@@ -105,16 +105,16 @@ it('http-routing', () => {
         const app = step.listener.server.listen();
 
         request(app)
-          .get('/r1')
+          .get('/mnt/r1')
           .expect(200)
           .then(res => {
             try {
               const r = JSON.parse(res.text);
-              assert.equal(r.path, '/r1');
+              assert.equal(r.path, '/mnt/r1');
               assert.equal(r.method, 'GET');
 
               request(app)
-                .post('/r2')
+                .post('/mnt/r2')
                 .send({
                   name: 'Manny',
                   species: 'cat'
@@ -124,15 +124,15 @@ it('http-routing', () => {
                   try {
                     const r = JSON.parse(res.text);
 
-                    assert.equal(r.path, '/r2');
+                    assert.equal(r.path, '/mnt/r2');
                     assert.equal(JSON.parse(epData).name, 'Manny');
 
                     request(app)
-                      .delete('/r3/4711/all')
+                      .delete('/mnt/r3/4711/all')
                       .expect(200)
                       .then(res => {
                         const r = JSON.parse(res.text);
-                        assert.equal(r.path, '/r3/4711/all');
+                        assert.equal(r.path, '/mnt/r3/4711/all');
                         assert.equal(r.args.all, 'all');
                         assert.equal(r.args.id, '4711');
                         assert.equal(r.method, 'DELETE');
