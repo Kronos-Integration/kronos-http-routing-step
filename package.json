@@ -1,7 +1,7 @@
 {
   "name": "kronos-http-routing-step",
   "version": "0.0.0-semantic-release",
-  "description": "step to rout http requests to endpoints",
+  "description": "step to route http requests to endpoints",
   "keywords": [
     "kronos-step"
   ],
@@ -30,7 +30,7 @@
     "cz-conventional-changelog": "1.1.5",
     "istanbul": "0.4.2",
     "jsdoc": "3.4.0",
-    "kronos-service-manager": "3.2.15",
+    "kronos-service-manager": "3.2.16",
     "kronos-service-registry": "1.3.3",
     "kronos-test-step": "3.1.0",
     "mocha": "2.4.5",
@@ -38,16 +38,13 @@
     "supertest": "^1.2.0",
     "supertest-as-promised": "^3.0.0"
   },
-  "contributors": [
-    {
-      "name": "Torsten Link",
-      "email": "torstenlink@gmx.de"
-    },
-    {
-      "name": "Markus Felten",
-      "email": "markus.felten@gmx.de"
-    }
-  ],
+  "contributors": [{
+    "name": "Torsten Link",
+    "email": "torstenlink@gmx.de"
+  }, {
+    "name": "Markus Felten",
+    "email": "markus.felten@gmx.de"
+  }],
   "license": "BSD-2-Clause",
   "engines": {
     "node": ">=5"
