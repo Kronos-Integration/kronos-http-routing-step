@@ -44,6 +44,10 @@ it('http-routing', () => {
       },
       "/r3/:id/:all": {
         "method": "delete"
+      },
+      "sp1": {
+        "path": "/socket",
+        "socket": true
       }
     }
   }, manager);
