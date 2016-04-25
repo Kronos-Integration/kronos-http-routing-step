@@ -1,13 +1,13 @@
 /* global describe, before, it, xit */
 /* jslint node: true, esnext: true */
 
-"use strict";
+'use strict';
 
 const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
-  request = require("supertest-as-promised")(Promise),
+  request = require('supertest-as-promised')(Promise),
   ksm = require('kronos-service-manager'),
   testStep = require('kronos-test-step'),
   endpoint = require('kronos-endpoint');
@@ -17,8 +17,8 @@ let manager;
 
 before(done => {
   ksm.manager([{}, {
-    name: "my-listener",
-    hostname: "localhost"
+    name: 'my-listener',
+    hostname: 'localhost'
   }], [require('kronos-service-registry'), require('kronos-service-koa'), require('../lib/http_routing')]).then(m => {
     manager = m;
     done();
@@ -27,27 +27,27 @@ before(done => {
 
 it('http-routing', () => {
   const hr = manager.steps['kronos-http-routing'].createInstance({
-    name: "myStep",
-    type: "kronos-http-routing",
-    listener: "my-listener",
-    mount: "/mnt",
+    name: 'myStep',
+    type: 'kronos-http-routing',
+    listener: 'my-listener',
+    mount: '/mnt',
     endpoints: {
-      "ep1": {
-        "serviceName": "service1",
-        "path": "/r1",
-        "target": "out1"
+      ep1: {
+        serviceName: 'service1',
+        path: '/r1',
+        target: 'out1'
       },
-      "ep2": {
-        "method": "post",
-        "path": "/r2",
-        "target": "out1"
+      ep2: {
+        method: 'post',
+        path: '/r2',
+        target: 'out1'
       },
-      "/r3/:id/:all": {
-        "method": "delete"
+      '/r3/:id/:all': {
+        method: 'delete'
       },
-      "sp1": {
-        "path": "/socket",
-        "socket": true
+      sp1: {
+        path: '/socket',
+        socket: true
       }
     }
   }, manager);
@@ -76,26 +76,26 @@ it('http-routing', () => {
   describe('static', () => {
     testStep.checkStepStatic(manager, hr);
     it('has endpoints', () => {
-      assert.equal(hr.endpoints.ep1.name, "ep1");
-      assert.equal(hr.endpoints.ep1.serviceName, "service1");
+      assert.equal(hr.endpoints.ep1.name, 'ep1');
+      assert.equal(hr.endpoints.ep1.serviceName, 'service1');
       assert.deepEqual(hr.endpoints.ep1.toJSON(), {
-        method: "GET",
+        method: 'GET',
         out: true,
-        path: "/mnt/r1",
-        serviceName: "service1"
+        path: '/mnt/r1',
+        serviceName: 'service1'
       });
-      assert.equal(hr.endpoints.ep2.name, "ep2");
+      assert.equal(hr.endpoints.ep2.name, 'ep2');
       assert.deepEqual(hr.endpoints.ep2.toJSON(), {
-        method: "POST",
+        method: 'POST',
         out: true,
-        path: "/mnt/r2"
+        path: '/mnt/r2'
       });
-      assert.equal(hr.endpoints['/r3/:id/:all'].name, "/r3/:id/:all");
-      assert.equal(hr.endpoints['/r3/:id/:all'].method, "DELETE");
+      assert.equal(hr.endpoints['/r3/:id/:all'].name, '/r3/:id/:all');
+      assert.equal(hr.endpoints['/r3/:id/:all'].method, 'DELETE');
       assert.deepEqual(hr.endpoints['/r3/:id/:all'].toJSON(), {
-        method: "DELETE",
+        method: 'DELETE',
         out: true,
-        path: "/mnt/r3/:id/:all"
+        path: '/mnt/r3/:id/:all'
       });
     });
   });
