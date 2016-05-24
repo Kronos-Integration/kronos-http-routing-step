@@ -18,7 +18,9 @@ let manager;
 before(done => {
   ksm.manager([{}, {
     name: 'my-listener',
-    hostname: 'localhost'
+    listen: {
+      address: 'localhost'
+    }
   }], [require('kronos-service-registry'), require('kronos-service-koa'), require('../lib/http_routing')]).then(m => {
     manager = m;
     done();
