@@ -1,11 +1,22 @@
 {
   "name": "kronos-http-routing-step",
   "version": "0.0.0-semantic-release",
+  "main": "lib/http_routing.js",
   "description": "step to route http requests to endpoints",
   "keywords": [
     "kronos-step"
   ],
-  "main": "lib/http_routing.js",
+  "contributors": [
+    {
+      "name": "Torsten Link",
+      "email": "torstenlink@gmx.de"
+    },
+    {
+      "name": "Markus Felten",
+      "email": "markus.felten@gmx.de"
+    }
+  ],
+  "license": "BSD-2-Clause",
   "scripts": {
     "cover": "nyc --temp-directory build/nyc ava",
     "doc": "./node_modules/.bin/jsdoc lib/*.js",
@@ -18,14 +29,6 @@
     "docs": "documentation readme {{module}} --section=API",
     "lint": "documentation lint {{module}}"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Kronos-Integration/kronos-http-routing-step.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Kronos-Integration/kronos-http-routing-step/issues"
-  },
-  "homepage": "https://github.com/Kronos-Integration/kronos-http-routing-step#readme",
   "dependencies": {
     "kronos-service-koa": "^3.3.15",
     "kronos-step": "^5.6.4"
@@ -46,28 +49,17 @@
     "rollup-plugin-multi-entry": "^2.0.2",
     "xo": "^0.19.0"
   },
-  "contributors": [
-    {
-      "name": "Torsten Link",
-      "email": "torstenlink@gmx.de"
-    },
-    {
-      "name": "Markus Felten",
-      "email": "markus.felten@gmx.de"
-    }
-  ],
-  "license": "BSD-2-Clause",
   "engines": {
     "node": ">=8.9.3"
   },
-  "xo": {
-    "space": true
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kronos-Integration/kronos-http-routing-step.git"
   },
-  "template": {
-    "repository": {
-      "url": "https://github.com/arlac77/npm-package-template.git"
-    }
+  "bugs": {
+    "url": "https://github.com/Kronos-Integration/kronos-http-routing-step/issues"
   },
+  "homepage": "https://github.com/Kronos-Integration/kronos-http-routing-step#readme",
   "ava": {
     "files": [
       "build/*-test.js"
@@ -87,5 +79,13 @@
       "lcov"
     ],
     "report-dir": "./build/coverage"
+  },
+  "xo": {
+    "space": true
+  },
+  "template": {
+    "repository": {
+      "url": "https://github.com/arlac77/npm-package-template.git"
+    }
   }
 }
