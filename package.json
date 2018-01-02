@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "kronos-service-koa": "^3.3.15",
-    "kronos-step": "^5.6.5"
+    "kronos-step": "^5.6.6"
   },
   "devDependencies": {
     "kronos-service-manager": "^3.5.10",
