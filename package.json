@@ -1,11 +1,10 @@
 {
   "name": "kronos-http-routing-step",
   "version": "0.0.0-semantic-release",
-  "main": "lib/http_routing.js",
+  "module": "src/http-routing.js",
+  "main": "dist/http-routing.js",
   "description": "step to route http requests to endpoints",
-  "keywords": [
-    "kronos-step"
-  ],
+  "keywords": ["kronos-step"],
   "contributors": [
     {
       "name": "Torsten Link",
@@ -19,15 +18,14 @@
   "license": "BSD-2-Clause",
   "scripts": {
     "cover": "nyc --temp-directory build/nyc ava",
-    "doc": "./node_modules/.bin/jsdoc lib/*.js",
     "test": "ava",
     "semantic-release": "semantic-release",
     "precover": "rollup -c tests/rollup.config.js",
     "pretest": "rollup -c tests/rollup.config.js",
     "posttest": "npm run prepare && markdown-doctest",
     "prepare": "rollup -c",
-    "docs": "documentation readme {{module}} --section=API",
-    "lint": "documentation lint {{module}}"
+    "docs": "documentation readme src/http-routing.js --section=API",
+    "lint": "documentation lint src/http-routing.js"
   },
   "dependencies": {
     "kronos-service-koa": "^3.3.15",
@@ -53,30 +51,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kronos-Integration/kronos-http-routing-step.git"
+    "url":
+      "git+https://github.com/Kronos-Integration/kronos-http-routing-step.git"
   },
   "bugs": {
-    "url": "https://github.com/Kronos-Integration/kronos-http-routing-step/issues"
+    "url":
+      "https://github.com/Kronos-Integration/kronos-http-routing-step/issues"
   },
-  "homepage": "https://github.com/Kronos-Integration/kronos-http-routing-step#readme",
+  "homepage":
+    "https://github.com/Kronos-Integration/kronos-http-routing-step#readme",
   "ava": {
-    "files": [
-      "build/*-test.js"
-    ],
-    "presets": [
-      "env"
-    ],
-    "require": [
-      "babel-register"
-    ]
+    "files": ["build/*-test.js"],
+    "presets": ["env"],
+    "require": ["babel-register"]
   },
   "nyc": {
-    "include": [
-      "build/*-test.js"
-    ],
-    "reporter": [
-      "lcov"
-    ],
+    "include": ["build/*-test.js"],
+    "reporter": ["lcov"],
     "report-dir": "./build/coverage"
   },
   "xo": {
