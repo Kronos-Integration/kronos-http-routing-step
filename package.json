@@ -1,10 +1,12 @@
 {
   "name": "kronos-http-routing-step",
   "version": "0.0.0-semantic-release",
-  "module": "src/http-routing.js",
   "main": "dist/http-routing.js",
+  "module": "src/http-routing.js",
   "description": "step to route http requests to endpoints",
-  "keywords": ["kronos-step"],
+  "keywords": [
+    "kronos-step"
+  ],
   "contributors": [
     {
       "name": "Torsten Link",
@@ -43,7 +45,6 @@
     "nyc": "^11.4.1",
     "ava": "^0.24.0",
     "rollup": "^0.53.3",
-    "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-multi-entry": "^2.0.2"
   },
   "engines": {
@@ -51,23 +52,30 @@
   },
   "repository": {
     "type": "git",
-    "url":
-      "git+https://github.com/Kronos-Integration/kronos-http-routing-step.git"
+    "url": "git+https://github.com/Kronos-Integration/kronos-http-routing-step.git"
   },
   "bugs": {
-    "url":
-      "https://github.com/Kronos-Integration/kronos-http-routing-step/issues"
+    "url": "https://github.com/Kronos-Integration/kronos-http-routing-step/issues"
   },
-  "homepage":
-    "https://github.com/Kronos-Integration/kronos-http-routing-step#readme",
+  "homepage": "https://github.com/Kronos-Integration/kronos-http-routing-step#readme",
   "ava": {
-    "files": ["build/*-test.js"],
-    "presets": ["env"],
-    "require": ["babel-register"]
+    "files": [
+      "build/*-test.js"
+    ],
+    "presets": [
+      "env"
+    ],
+    "require": [
+      "babel-register"
+    ]
   },
   "nyc": {
-    "include": ["build/*-test.js"],
-    "reporter": ["lcov"],
+    "include": [
+      "build/*-test.js"
+    ],
+    "reporter": [
+      "lcov"
+    ],
     "report-dir": "./build/coverage"
   },
   "xo": {
