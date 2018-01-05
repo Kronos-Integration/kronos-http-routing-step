@@ -30,7 +30,7 @@
     "lint": "documentation lint src/http-routing.js"
   },
   "dependencies": {
-    "kronos-service-koa": "^3.3.15",
+    "kronos-service-koa": "^3.3.16",
     "kronos-step": "^5.6.6"
   },
   "devDependencies": {
