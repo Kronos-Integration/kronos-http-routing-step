@@ -41,7 +41,7 @@
     "semantic-release": "^13.1.4",
     "supertest": "^3.0.0",
     "supertest-as-promised": "^4.0.2",
-    "documentation": "^5.3.5",
+    "documentation": "^5.4.0",
     "markdown-doctest": "^0.9.1",
     "nyc": "^11.4.1",
     "ava": "^0.25.0",
