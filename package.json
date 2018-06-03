@@ -1,6 +1,9 @@
 {
   "name": "kronos-http-routing-step",
   "version": "0.0.0-semantic-release",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/http-routing.js",
   "module": "src/http-routing.js",
   "description": "step to route http requests to endpoints",
