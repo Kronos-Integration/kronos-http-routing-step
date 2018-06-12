@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "kronos-service-manager": "^3.5.10",
-    "kronos-service-registry": "^1.4.10",
+    "kronos-service-registry": "^1.5.0",
     "kronos-test-step": "3.1.4",
     "semantic-release": "^15.5.2",
     "supertest": "^3.1.0",
