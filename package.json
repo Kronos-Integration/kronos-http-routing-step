@@ -34,14 +34,14 @@
     "travis-deploy-once": "travis-deploy-once"
   },
   "dependencies": {
-    "kronos-service-koa": "^4.0.4",
+    "kronos-service-koa": "^4.0.5",
     "kronos-step": "^5.7.0"
   },
   "devDependencies": {
     "kronos-service-manager": "^3.5.10",
     "kronos-service-registry": "^1.5.0",
     "kronos-test-step": "3.1.4",
-    "semantic-release": "^15.9.12",
+    "semantic-release": "^15.9.13",
     "supertest": "^3.3.0",
     "supertest-as-promised": "^4.0.2",
     "documentation": "^8.1.2",
@@ -58,7 +58,7 @@
     "rollup-plugin-cleanup": "^3.0.0"
   },
   "engines": {
-    "node": ">=10.6"
+    "node": ">=10.10"
   },
   "repository": {
     "type": "git",
