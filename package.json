@@ -34,7 +34,7 @@
     "travis-deploy-once": "travis-deploy-once"
   },
   "dependencies": {
-    "kronos-service-koa": "^4.0.5",
+    "kronos-service-koa": "^4.0.7",
     "kronos-step": "^5.7.0"
   },
   "devDependencies": {
