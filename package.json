@@ -68,17 +68,16 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-http-routing-step#readme",
   "ava": {
     "files": [
-      "build/*-test.js"
+      "tests/*-test.js"
     ],
     "presets": [
       "env"
     ],
     "require": [
-      "babel-register"
-    ]
-  },
-  "xo": {
-    "space": true
+      "esm"
+    ],
+    "babel": false,
+    "compileEnhancements": false
   },
   "template": {
     "repository": {
