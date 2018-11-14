@@ -68,7 +68,8 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-http-routing-step#readme",
   "ava": {
     "files": [
-      "tests/*-test.js"
+      "tests/*-test.js",
+      "tests/*-test.mjs"
     ],
     "presets": [
       "env"
