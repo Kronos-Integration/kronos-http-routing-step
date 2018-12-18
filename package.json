@@ -42,7 +42,7 @@
     "semantic-release": "^15.13.1",
     "supertest": "^3.3.0",
     "supertest-as-promised": "^4.0.2",
-    "documentation": "^9.0.0",
+    "documentation": "^9.1.0",
     "markdown-doctest": "^0.9.1",
     "ava": "^1.0.1",
     "rollup": "^0.68.0",
