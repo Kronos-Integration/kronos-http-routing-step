@@ -23,34 +23,34 @@
   "license": "BSD-2-Clause",
   "scripts": {
     "cover": "c8 --temp-directory build/coverage ava && c8 report -r lcov --temp-directory build/coverage",
-    "test": "ava",
+    "docs": "documentation readme src/http-routing.js --section=API",
+    "lint": "documentation lint src/http-routing.js",
     "posttest": "npm run prepare && markdown-doctest",
     "prepare": "rollup -c",
-    "docs": "documentation readme src/http-routing.js --section=API",
-    "lint": "documentation lint src/http-routing.js"
+    "test": "ava"
   },
   "dependencies": {
     "kronos-service-koa": "^4.0.7",
     "kronos-step": "^5.7.0"
   },
   "devDependencies": {
+    "ava": "^1.0.1",
+    "c8": "^3.2.1",
+    "documentation": "^9.1.1",
+    "esm": "^3.0.84",
     "kronos-service-manager": "^3.5.10",
     "kronos-service-registry": "^1.5.0",
     "kronos-test-step": "3.1.4",
+    "markdown-doctest": "^0.9.1",
+    "rollup": "^1.0.0",
+    "rollup-plugin-cleanup": "^3.1.0",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-executable": "^1.3.0",
+    "rollup-plugin-json": "^3.1.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
     "semantic-release": "^15.13.2",
     "supertest": "^3.3.0",
-    "supertest-as-promised": "^4.0.2",
-    "documentation": "^9.1.1",
-    "markdown-doctest": "^0.9.1",
-    "ava": "^1.0.1",
-    "rollup": "^1.0.0",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-executable": "^1.3.0",
-    "rollup-plugin-cleanup": "^3.1.0",
-    "rollup-plugin-json": "^3.1.0",
-    "c8": "^3.2.1",
-    "esm": "^3.0.84"
+    "supertest-as-promised": "^4.0.2"
   },
   "engines": {
     "node": ">=10.15.0"
