@@ -54,7 +54,7 @@
     "supertest-as-promised": "^4.0.2"
   },
   "engines": {
-    "node": ">=12.11.1"
+    "node": ">=12.12.0"
   },
   "repository": {
     "type": "git",
